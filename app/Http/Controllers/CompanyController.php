@@ -123,15 +123,25 @@ class CompanyController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            "id" => 'required',
             "name" => 'required',
             "description" => 'required',
-            "city" => 'required',
+            "address" => 'required',
+            "locale_id" => 'required',
             "email" => 'required',
             "site" => 'required',
             "linkedin" => 'required'
         ]);
-        Company::find($request->id)->update($request);
+        Company::find($request->id)->update([
+            'name' => $request->name,
+            'logo' => $request->logo,
+            'description' => $request->description,
+            'address' => $request->address,
+            'locale_id' => $request->locale_id,
+            'contact' => $request->contact,
+            'email' => $request->email,
+            'site' => $request->site,
+            'linkedin' => $request->linkedin
+        ]);
         return redirect('/company/show/' . $request->id);
     }
 
