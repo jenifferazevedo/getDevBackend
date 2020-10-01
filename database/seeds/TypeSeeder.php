@@ -17,6 +17,7 @@ class TypeSeeder extends Seeder
         foreach ($types as $type) {
             DB::table('types')->insert([
                 'name' => $type,
+                'created_at' => new DateTime(),
             ]);
         }
     }

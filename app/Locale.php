@@ -7,11 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class Locale extends Model
 {
     protected $fillable = [
-        'name'
+        'name',
     ];
 
     public function internships()
     {
         return $this->hasMany(Internship::class);
+    }
+
+    public function companies()
+    {
+        return $this->hasMany(Company::class);
     }
 }

@@ -20,6 +20,7 @@ class LocaleSeeder extends Seeder
         foreach ($locales as $locale) {
             DB::table('locales')->insert([
                 'name' => $locale,
+                'created_at' => new DateTime(),
             ]);
         }
     }

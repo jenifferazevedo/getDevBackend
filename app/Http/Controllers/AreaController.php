@@ -14,7 +14,14 @@ class AreaController extends Controller
      */
     public function index()
     {
-        //
+        $area = Area::all();
+        return view('pages.areaTypeLocale.index', [
+            "collection" => $area,
+            "title" => "Knowledge areas",
+            "create" => "/area/create",
+            "show" => "/area/show/",
+            "destroy" => "/area/destroy/",
+        ]);
     }
 
     /**
@@ -24,7 +31,12 @@ class AreaController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.areaTypeLocale.form', [
+            "update" => '/area/update/',
+            "store" => '/area/store',
+            "title" => "Knowledge area",
+            "voltar" => "/areas"
+        ]);
     }
 
     /**
@@ -35,7 +47,14 @@ class AreaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "name" => 'required',
+        ]);
+        Area::create([
+            'name' => $request->name,
+        ]);
+
+        return redirect('/areas');
     }
 
     /**
@@ -44,9 +63,16 @@ class AreaController extends Controller
      * @param  \App\Area  $area
      * @return \Illuminate\Http\Response
      */
-    public function show(Area $area)
+    public function show($id)
     {
-        //
+        $area = Area::find($id);
+        return view('pages.areaTypeLocale.show', [
+            'item' => $area,
+            'title' => "Knowledge area",
+            'voltar' => "/areas",
+            'destroy' => "/area/destroy/",
+            'edit' => "/area/edit/"
+        ]);
     }
 
     /**
@@ -55,9 +81,16 @@ class AreaController extends Controller
      * @param  \App\Area  $area
      * @return \Illuminate\Http\Response
      */
-    public function edit(Area $area)
+    public function edit($id)
     {
-        //
+        $area = Area::find($id);
+        return view('pages.areaTypeLocale.form', [
+            "item" => $area,
+            "update" => "/area/update/",
+            "store" => "/area/store",
+            "title" => "Knowledge area",
+            "voltar" => "/areas"
+        ]);
     }
 
     /**
@@ -67,9 +100,16 @@ class AreaController extends Controller
      * @param  \App\Area  $area
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Area $area)
+    public function update(Request $request)
     {
-        //
+        $request->validate([
+            "id" => 'required',
+            "name" => 'required',
+        ]);
+        Area::find($request->id)->update([
+            'name' => $request->name,
+        ]);
+        return redirect('/area/show/' . $request->id);
     }
 
     /**
@@ -78,8 +118,9 @@ class AreaController extends Controller
      * @param  \App\Area  $area
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Area $area)
+    public function destroy($id)
     {
-        //
+        Area::find($id)->delete();
+        return redirect('/areas');
     }
 }

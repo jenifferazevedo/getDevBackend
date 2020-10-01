@@ -14,7 +14,14 @@ class LocaleController extends Controller
      */
     public function index()
     {
-        //
+        $locales = Locale::all();
+        return view('pages.areaTypeLocale.index', [
+            "collection" => $locales,
+            "title" => "Locales",
+            "create" => "/locale/create",
+            "show" => "/locale/show/",
+            "destroy" => "/locale/destroy/",
+        ]);
     }
 
     /**
@@ -24,7 +31,12 @@ class LocaleController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.areaTypeLocale.form', [
+            "update" => '/locale/update/',
+            "store" => '/locale/store',
+            "title" => "Locale",
+            "voltar" => "/locales"
+        ]);
     }
 
     /**
@@ -35,7 +47,14 @@ class LocaleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "name" => 'required',
+        ]);
+        Locale::create([
+            'name' => $request->name,
+        ]);
+
+        return redirect('/locales');
     }
 
     /**
@@ -44,9 +63,16 @@ class LocaleController extends Controller
      * @param  \App\Locale  $locale
      * @return \Illuminate\Http\Response
      */
-    public function show(Locale $locale)
+    public function show($id)
     {
-        //
+        $locale = Locale::find($id);
+        return view('pages.areaTypeLocale.show', [
+            'item' => $locale,
+            'title' => "Locale",
+            'voltar' => "/locales",
+            'destroy' => "/locale/destroy/",
+            'edit' => "/locale/edit/"
+        ]);
     }
 
     /**
@@ -55,9 +81,18 @@ class LocaleController extends Controller
      * @param  \App\Locale  $locale
      * @return \Illuminate\Http\Response
      */
-    public function edit(Locale $locale)
+    public function edit($id)
     {
-        //
+
+        $locale = Locale::find($id);
+        return view('pages.areaTypeLocale.form', [
+            "item" => $locale,
+            "update" => "/locale/update/",
+            "store" => "/locale/store",
+            "title" => "Locale",
+            "voltar" => "/locales"
+        ]);
+        //  return view('pages.locale.create', ["locale" => $locale]);
     }
 
     /**
@@ -67,9 +102,16 @@ class LocaleController extends Controller
      * @param  \App\Locale  $locale
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Locale $locale)
+    public function update(Request $request)
     {
-        //
+        $request->validate([
+            "id" => 'required',
+            "name" => 'required',
+        ]);
+        Locale::find($request->id)->update([
+            'name' => $request->name,
+        ]);
+        return redirect('/locale/show/' . $request->id);
     }
 
     /**
@@ -78,8 +120,9 @@ class LocaleController extends Controller
      * @param  \App\Locale  $locale
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Locale $locale)
+    public function destroy($id)
     {
-        //
+        Locale::find($id)->delete();
+        return redirect('/locales');
     }
 }

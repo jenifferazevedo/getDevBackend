@@ -14,7 +14,14 @@ class TypeController extends Controller
      */
     public function index()
     {
-        //
+        $types = Type::all();
+        return view('pages.areaTypeLocale.index', [
+            "collection" => $types,
+            "title" => "Internship types",
+            "create" => "/type/create",
+            "show" => "/type/show/",
+            "destroy" => "/type/destroy/",
+        ]);
     }
 
     /**
@@ -24,7 +31,12 @@ class TypeController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.areaTypeLocale.form', [
+            "update" => '/type/update/',
+            "store" => '/type/store',
+            "title" => "Internship type",
+            "voltar" => "/types"
+        ]);
     }
 
     /**
@@ -35,7 +47,14 @@ class TypeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "name" => 'required',
+        ]);
+        Type::create([
+            'name' => $request->name,
+        ]);
+
+        return redirect('/types');
     }
 
     /**
@@ -44,9 +63,16 @@ class TypeController extends Controller
      * @param  \App\Type  $type
      * @return \Illuminate\Http\Response
      */
-    public function show(Type $type)
+    public function show($id)
     {
-        //
+        $type = Type::find($id);
+        return view('pages.areaTypeLocale.show', [
+            'item' => $type,
+            'title' => "Internship type",
+            'voltar' => "/types",
+            'destroy' => "/type/destroy/",
+            'edit' => "/type/edit/"
+        ]);
     }
 
     /**
@@ -55,9 +81,16 @@ class TypeController extends Controller
      * @param  \App\Type  $type
      * @return \Illuminate\Http\Response
      */
-    public function edit(Type $type)
+    public function edit($id)
     {
-        //
+        $type = Type::find($id);
+        return view('pages.areaTypeLocale.form', [
+            "item" => $type,
+            "update" => "/type/update/",
+            "store" => "/type/store",
+            "title" => "Internship type",
+            "voltar" => "/types"
+        ]);
     }
 
     /**
@@ -67,9 +100,16 @@ class TypeController extends Controller
      * @param  \App\Type  $type
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Type $type)
+    public function update(Request $request)
     {
-        //
+        $request->validate([
+            "id" => 'required',
+            "name" => 'required',
+        ]);
+        Type::find($request->id)->update([
+            'name' => $request->name,
+        ]);
+        return redirect('/type/show/' . $request->id);
     }
 
     /**
@@ -78,8 +118,9 @@ class TypeController extends Controller
      * @param  \App\Type  $type
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Type $type)
+    public function destroy($id)
     {
-        //
+        Type::find($id)->delete();
+        return redirect('/types');
     }
 }

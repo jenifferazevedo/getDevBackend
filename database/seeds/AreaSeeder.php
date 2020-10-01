@@ -17,6 +17,7 @@ class AreaSeeder extends Seeder
         foreach ($areas as $area) {
             DB::table('areas')->insert([
                 'name' => $area,
+                'created_at' => new DateTime(),
             ]);
         }
     }
